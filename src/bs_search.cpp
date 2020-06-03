@@ -59,7 +59,7 @@ void BsSearchResult::process_response(BsResponse response) {
 			song.metadata.characteristics.push_back(bs_char);
 		}
 		auto difficulties = metadata["difficulties"];
-		for(json& it : difficulties.items()) {
+		for(nlohmann::detail::iteration_proxy_value<nlohmann::detail::iter_impl<nlohmann::basic_json<std::map, std::vector, std::__cxx11::basic_string<char>, bool, long, unsigned long, double, std::allocator, nlohmann::adl_serializer> > >& it : difficulties.items()) { // Don't ask. Just don't
 			song.metadata.difficulties[it.key()] = it.value();
 		}
 		
