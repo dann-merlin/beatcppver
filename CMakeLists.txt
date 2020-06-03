@@ -9,7 +9,7 @@ set(CMAKE_INSTALL_INCLUDEDIR "/usr/include")
 set(BUILD_TEST OFF CACHE BOOL "Whether cmake should also build the test")
 
 file(GLOB_RECURSE SOURCE_FILES "src/*.cpp")
-file(GLOB_RECURSE HEADER_FILES "src/*.h")
+file(GLOB_RECURSE HEADER_FILES "include/*.h")
 
 project(beatcppver VERSION 0.0.1 DESCRIPTION "BeatSaver API Wrapper for C++")
 
