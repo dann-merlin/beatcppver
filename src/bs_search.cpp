@@ -59,7 +59,7 @@ void BsSearchResult::process_response(BsResponse response) {
 			song.metadata.characteristics.push_back(bs_char);
 		}
 		auto difficulties = metadata["difficulties"];
-		for(auto& it : difficulties.items()) {
+		for(json& it : difficulties.items()) {
 			song.metadata.difficulties[it.key()] = it.value();
 		}
 		
