@@ -16,5 +16,6 @@ class BeatCver {
 		void operator=(BeatCver const&) = delete;
 
 		int init();
-		BsSearchResult *searchText(char* query, int page = 0);
+		BsSearchResult *searchText(const char* query, int page);
+		std::vector<BsSong> searchText(std::string query, int max_sites = 10);
 };

@@ -76,20 +76,19 @@ void BsSearchResult::process_response(BsResponse response) {
 		song.directDownload = json_entry["directDownload"];
 		song.downloadURL = json_entry["downloadURL"];
 		song.coverURL = json_entry["coverURL"];
-		nextPage = json_entry["nextPage"].is_null() ? false : true;
-		prevPage = json_entry["prevPage"].is_null() ? false : true;
-		if(json_entry["lastPage"].is_null()) {
-			lastPage = 0;
-		} else {
-			lastPage = json_entry["lastPage"];
-		}
-		continue;
-		totalEntries = json_entry["totalDocs"];
 		results.push_back(song);
 	}
+	nextPage = j["nextPage"].is_null() ? false : true;
+	prevPage = j["prevPage"].is_null() ? false : true;
+	if(j["lastPage"].is_null()) {
+		lastPage = 0;
+	} else {
+		lastPage = j["lastPage"];
+	}
+	totalEntries = j["totalDocs"];
 }
 
-BsSearchResult::BsSearchResult(char* query, int page, BsSearchType type) {
+BsSearchResult::BsSearchResult(const char* query, int page, BsSearchType type) {
 	std::string typestring;
 	switch (type) {
 		case advanced:
@@ -101,9 +100,12 @@ BsSearchResult::BsSearchResult(char* query, int page, BsSearchType type) {
 	}
 	// TODO Option page == -1
 
-	std::string querystring = search_url + typestring + "/:" + std::to_string(page) + "?q=" + BsCurl::percentEscapeString(query);
+	std::string querystring = search_url + typestring + "/" + std::to_string(page) + "?q=" + BsCurl::percentEscapeString(query);
 	/* BsCurl::sendRequest(querystring); */
 	auto response = BsCurl::sendRequest(querystring);
-	std::cout << response.responseText << std::endl;
+	if(response.returnCode != "200" ) {
+		nextPage = false;
+		return;
+	}
 	process_response(response);
 }

@@ -13,11 +13,13 @@ enum BsSearchType {
 
 class BsSearchResult {
 	private:
-		std::vector<BsSong> results;
 		int page, lastPage, totalEntries;
-		bool nextPage, prevPage;
 
 		void process_response(BsResponse response);
 	public:
-		BsSearchResult(char* query, int page, BsSearchType type);
+		std::vector<BsSong> results;
+		bool nextPage, prevPage;
+
+		BsSearchResult(const char* query, int page, BsSearchType type);
+		BsSearchResult(const char* query, BsSearchType type);
 };

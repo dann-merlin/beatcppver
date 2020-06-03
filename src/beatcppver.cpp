@@ -26,7 +26,20 @@ int BeatCver::init() {
 BeatCver::~BeatCver() {
 }
 
-BsSearchResult *BeatCver::searchText(char *query, int page) {
+BsSearchResult *BeatCver::searchText(const char *query, int page) {
 	BsSearchResult *result = new BsSearchResult(query, page, BsSearchType::text);
 	return result;
+}
+
+std::vector<BsSong> BeatCver::searchText(std::string query, int max_sites) {
+	int page = 0;
+	BsSearchResult *result = nullptr;
+	std::vector<BsSong> song_list;
+	do {
+		delete result;
+		result = new BsSearchResult(query.c_str(), page++, BsSearchType::text);
+		song_list.insert(song_list.end(), result->results.begin(), result->results.end());
+	} while(page <= max_sites && result->nextPage);
+	delete result;
+	return song_list;
 }

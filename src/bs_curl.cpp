@@ -3,9 +3,7 @@
 #include <iterator>
 #include <string>
 #include <iostream>
-
-static const std::string API_URL = "https://beatsaver.com/api";
-static const char *USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36";
+#include <vector>
 
 static int write_into(char* data, size_t size, size_t nmemb, std::string *buffer_in) {
 	if(buffer_in != NULL) {
@@ -17,16 +15,12 @@ static int write_into(char* data, size_t size, size_t nmemb, std::string *buffer
 	return 0;
 }	
 
-struct curl_slist *BsCurl::generateHeaders() {
+curl_slist *BsCurl::generateHeaders(std::vector<std::string> header_list) {
 	struct curl_slist *headers = NULL;
-	headers = curl_slist_append(headers, "Accept: application/json");
-	headers = curl_slist_append(headers, "Content-Type: application/json");
-	headers = curl_slist_append(headers, "charset: utf-8");
+	for(auto str : header_list) {
+		headers = curl_slist_append(headers, str.c_str());
+	}
 	return headers;
-}
-
-std::string BsCurl::generateUrl(std::string query) {
-	return API_URL + query;
 }
 
 std::string BsCurl::percentEscapeString(std::string s) {
@@ -38,23 +32,30 @@ std::string BsCurl::percentEscapeString(std::string s) {
 	return escaped;
 }
 
-BsResponse BsCurl::sendRequest(std::string query) {
+BsResponse BsCurl::sendRequest(std::string query, BsRequestOptions options) {
 	CURL *handle = curl_easy_init();
 	if(!handle) {
 		return BsResponse{"418", "curl_easy_init failed. Was not so easy after all, it seems..."};
 	}
 
-	curl_slist *headers = generateHeaders();
+	curl_slist *headers = generateHeaders(options.headers);
 	curl_easy_setopt(handle, CURLOPT_HTTPHEADER, headers);
 
-	std::cout << generateUrl(query) << std::endl;
+	std::string url_string = (options.api_url + query);
 
-	std::string url_string = generateUrl(query);
 	const char* url = url_string.c_str();
 	curl_easy_setopt(handle, CURLOPT_URL, url);
+	const char* data = options.data.c_str();
 
-	curl_easy_setopt(handle, CURLOPT_HTTPGET, 1);
-	curl_easy_setopt(handle, CURLOPT_USERAGENT, USER_AGENT);
+	if(options.request_type == "GET") {
+		curl_easy_setopt(handle, CURLOPT_HTTPGET, 1);
+	} else if(options.request_type == "POST") {
+		curl_easy_setopt(handle, CURLOPT_POST, 1);
+		curl_easy_setopt(handle, CURLOPT_POSTFIELDSIZE, options.data.size());
+		curl_easy_setopt(handle, CURLOPT_POSTFIELDS, data);
+	}
+
+	curl_easy_setopt(handle, CURLOPT_USERAGENT, options.user_agent.c_str());
 
 	std::string output;
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_into);

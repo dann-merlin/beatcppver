@@ -6,6 +6,5 @@ die() {
 	exit 1
 }
 
-[ -f "$dir/build/Makefile" ] || "$dir/configure.sh"
-
+[ -f "$dir/build/Makefile" ] || "$dir/configure.sh" && \
 cmake --build "$dir/build" --parallel
