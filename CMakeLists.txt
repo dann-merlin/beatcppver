@@ -33,6 +33,7 @@ set_target_properties(beatcppver PROPERTIES SOVERSION 0)
 
 set_target_properties(beatcppver PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
 target_link_libraries(beatcppver PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(beatcppver PRIVATE CURL::libcurl)
 target_include_directories(beatcppver PRIVATE src)
 if(BUILD_TEST)
 target_include_directories(tst_beatcppver PRIVATE src)
