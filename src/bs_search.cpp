@@ -28,15 +28,15 @@ void BsSearchResult::process_response(BsResponse response) {
 		// read metadata
 		auto metadata = json_entry["metadata"];
 		song.metadata.duration = metadata["duration"];
-		song.metadata.levelAuthorName = metadata["levelAuthorName"];
-		song.metadata.songAuthorName = metadata["songAuthorName"];
-		song.metadata.songName = metadata["songName"];
-		song.metadata.songSubName = metadata["songSubName"];
+		song.metadata.levelAuthorName = metadata["levelAuthorName"].get<std::string>();
+		song.metadata.songAuthorName = metadata["songAuthorName"].get<std::string>();
+		song.metadata.songName = metadata["songName"].get<std::string>();
+		song.metadata.songSubName = metadata["songSubName"].get<std::string>();
 		song.metadata.bpm = metadata["bpm"];
 		auto characteristics_list = metadata["characteristics"];
 		for( auto characteristic : characteristics_list ) {
 			BsSongCharacteristics bs_char;
-			bs_char.name = characteristic["name"];
+			bs_char.name = characteristic["name"].get<std::string>();
 
 			auto json_difficulties = characteristic["difficulties"];
 			for(json::iterator it = json_difficulties.begin(); it != json_difficulties.end(); it++) {
@@ -64,18 +64,18 @@ void BsSearchResult::process_response(BsResponse response) {
 		}
 		
 		// read the rest
-		song.description = json_entry["description"];
-		song.deletedAt = (json_entry["deletedAt"].is_null()) ? "null" : json_entry["deletedAt"];
-		song._id = json_entry["_id"];
-		song.key = json_entry["key"];
-		song.name = json_entry["name"];
-		song.uploader_id = json_entry["uploader"]["_id"];
-		song.uploaderUsername = json_entry["uploader"]["username"];
-		song.hash = json_entry["hash"];
-		song.uploaded = json_entry["uploaded"];
-		song.directDownload = json_entry["directDownload"];
-		song.downloadURL = json_entry["downloadURL"];
-		song.coverURL = json_entry["coverURL"];
+		song.description = json_entry["description"].get<std::string>();
+		song.deletedAt = (json_entry["deletedAt"].is_null()) ? "null" : json_entry["deletedAt"].get<std::string>();
+		song._id = json_entry["_id"].get<std::string>();
+		song.key = json_entry["key"].get<std::string>();
+		song.name = json_entry["name"].get<std::string>();
+		song.uploader_id = json_entry["uploader"]["_id"].get<std::string>();
+		song.uploaderUsername = json_entry["uploader"]["username"].get<std::string>();
+		song.hash = json_entry["hash"].get<std::string>();
+		song.uploaded = json_entry["uploaded"].get<std::string>();
+		song.directDownload = json_entry["directDownload"].get<std::string>();
+		song.downloadURL = json_entry["downloadURL"].get<std::string>();
+		song.coverURL = json_entry["coverURL"].get<std::string>();
 		results.push_back(song);
 	}
 	nextPage = j["nextPage"].is_null() ? false : true;

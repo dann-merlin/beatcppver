@@ -6,5 +6,6 @@ die() {
 	exit 1
 }
 
-[ -f "$dir/build/Makefile" ] || "$dir/configure.sh" && \
-cmake --build "$dir/build" --parallel
+[ "$OS" = "Windows_NT" ] || [ -f "$dir/build/Makefile" ] || "$dir/configure.sh" $@ && \
+
+cmake --build "$dir/build" -j4
