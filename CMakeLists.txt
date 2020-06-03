@@ -4,6 +4,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lcurl")
 set(CMAKE_INSTALL_LIBDIR "/usr/lib")
 set(CMAKE_INSTALL_INCLUDEDIR "/usr/include")
+set(BUILD_TEST OFF CACHE BOOL "Whether cmake should also build the test")
 
 file(GLOB_RECURSE SOURCE_FILES "src/*.cpp")
 file(GLOB_RECURSE HEADER_FILES "src/*.h")
