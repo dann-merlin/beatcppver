@@ -29,12 +29,12 @@ if(BUILD_TEST)
 	add_executable(tst_beatcppver "${CMAKE_CURRENT_SOURCE_DIR}/test/tst_bs.cpp" ${BEATCPPVER_SOURCE_FILES})
 endif(BUILD_TEST)
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/beatcppver.pc.in" "${CMAKE_CURRENT_SOURCE_DIR}/beatcppver.pc" @ONLY)
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/beatcppver.pc.in" "beatcppver.pc" @ONLY)
 
 include_directories(${CURL_INCLUDE_DIRS})
 link_directories(${CURL_LIBRARIES})
 
-set_target_properties(beatcppver PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(beatcppver PROPERTIES VERSION "${PROJECT_VERSION}")
 
 set_target_properties(beatcppver PROPERTIES SOVERSION 0)
 
@@ -42,11 +42,12 @@ set_target_properties(beatcppver PROPERTIES PUBLIC_HEADER "${BEATCPPVER_HEADER_F
 target_link_libraries(beatcppver PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(beatcppver PRIVATE CURL::libcurl)
 target_link_libraries(bssf -static-libgcc -static-libstdc++)
-target_include_directories(beatcppver PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(beatcppver PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+
 if(BUILD_TEST)
-target_include_directories(tst_beatcppver PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_include_directories(tst_beatcppver PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/test)
+target_include_directories(tst_beatcppver PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories(tst_beatcppver PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/test")
 endif(BUILD_TEST)
 
-install(TARGETS beatcppver LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-install(FILES ${CMAKE_BINARY_DIR}/beatcppver.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+install(TARGETS beatcppver LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/beatcppver.pc" DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
