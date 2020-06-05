@@ -8,8 +8,8 @@ set(CMAKE_INSTALL_LIBDIR "/usr/lib")
 set(CMAKE_INSTALL_INCLUDEDIR "/usr/include")
 set(BUILD_TEST OFF CACHE BOOL "Whether cmake should also build the test")
 
-file(GLOB_RECURSE SOURCE_FILES "${CMAKE_SOURCE_DIR}/src/*.cpp")
-file(GLOB_RECURSE HEADER_FILES "${CMAKE_SOURCE_DIR}/include/*.h")
+file(GLOB_RECURSE SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+file(GLOB_RECURSE HEADER_FILES "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 
 project(beatcppver VERSION 0.0.1 DESCRIPTION "BeatSaver API Wrapper for C++")
 
@@ -28,7 +28,7 @@ else(BEATCPPVER_STATIC)
 	message("Building shared lib")
 endif(BEATCPPVER_STATIC)
 if(BUILD_TEST)
-	add_executable(tst_beatcppver "${CMAKE_SOURCE_DIR}/test/tst_bs.cpp" ${SOURCE_FILES})
+	add_executable(tst_beatcppver "${CMAKE_CURRENT_SOURCE_DIR}/test/tst_bs.cpp" ${SOURCE_FILES})
 endif(BUILD_TEST)
 
 configure_file(beatcppver.pc.in beatcppver.pc @ONLY)
